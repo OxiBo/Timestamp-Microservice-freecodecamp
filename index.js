@@ -18,7 +18,12 @@ app.get("/", (req, res) => {
 
 app.get("/api/timestamp/:date_string?", (req, res) => {
   const dateString = req.params.date_string;
-  res.send(helpers.getDateAndTime(dateString));
+  const response = helpers.getDateAndTime(dateString);
+
+  if (isNaN(response.unix)) {
+    return res.send({ error: "Invalid Date" });
+  }
+  return res.send(helpers.getDateAndTime(dateString));
 });
 
 const PORT = process.env.PORT || 3002;
